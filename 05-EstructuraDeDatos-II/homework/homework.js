@@ -10,9 +10,56 @@ Implementar la clase LinkedList, definiendo los siguientes métodos:
   search(isEven), donde isEven es una función que retorna true cuando recibe por parámetro un número par, busca un nodo cuyo valor sea un número par.
   En caso de que la búsqueda no arroje resultados, search debe retornar null.
 */
-function LinkedList() {}
+class LinkedList {
+  constructor() {
+    this.head = null
+  }
+  add(value) {
+    let node = new Node(value)
+    let current = this.head
+    if (!current) this.head = node
+    else {
+      while (current.next) {
+        current = current.next
+      }
+      current.next = node
+    }  
+  }
+  remove() {
+    let current = this.head
+    if (!current) return current 
+    if (!current.next) {
+      this.head = null 
+      return current.value
+    }
+    while (current.next.next) {
+      current = current.next
+    }
+    let aux = current.next
+    current.next = null
+    return aux.value
+  }
+  search(param) {
+    let current = this.head 
+    if (!current) return null
+    while (current) {
+      if (typeof(param) === 'function') {
+        if (param(current.value) === true) return current.value
+      }
+      if (current.value === param) return current.value
+      current = current.next 
+    }
+    return null
+  }
+}
 
-function Node(value) {}
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
 
 /* EJERCICIO 2
 Implementar la clase HashTable.
@@ -27,7 +74,35 @@ La clase debe tener los siguientes métodos:
 
 Ejemplo: supongamos que quiero guardar {instructora: 'Ani'} en la tabla. Primero puedo chequear, con hasKey, si ya hay algo en la tabla con el nombre 'instructora'; luego, invocando set('instructora', 'Ani'), se almacenará el par clave-valor en un bucket específico (determinado al hashear la clave)
 */
-function HashTable() {}
+
+class HashTable {
+  constructor () {
+    this.table = [],
+    this.numBuckets = 35
+  }
+  hash(key) {
+    let bucket = 0
+    for (let i = 0; i < key.length; i++) {
+      bucket += key.charCodeAt(i)
+    }
+    return bucket % this.numBuckets
+  }
+  set(key, value) {
+    let bucket = this.hash(key)
+    if (typeof(key) !== 'string') throw TypeError('Keys must be strings')
+    if (!this.table[bucket]) this.table[bucket] = {}
+    this.table[bucket][key] = value
+  }
+  get(key) {
+    let bucket = this.hash(key)
+    return this.table[bucket][key]
+  }
+  hasKey(key) {
+    let bucket = this.hash(key)
+    if (this.table[bucket]) return this.table[bucket].hasOwnProperty(key)
+    return false 
+  }
+}
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
