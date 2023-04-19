@@ -99,8 +99,7 @@ class HashTable {
   }
   hasKey(key) {
     let bucket = this.hash(key)
-    if (this.table[bucket]) return this.table[bucket].hasOwnProperty(key)
-    return false 
+    return !!this.table[bucket][key]
   }
 }
 
