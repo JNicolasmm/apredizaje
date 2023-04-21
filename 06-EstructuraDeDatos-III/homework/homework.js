@@ -45,11 +45,28 @@ class BinarySearchTree {
       else return this.right.contains(value)
     }
   }
-  depthFirstForEach() {
-
+  depthFirstForEach(cb, order = 'in-order') {
+    if (order === 'in-order') {
+      if (this.left && this.left.depthFirstForEach(cb, order));
+      cb(this.value)
+      if (this.right && this.right.depthFirstForEach(cb, order));
+    }
+    if (order === 'pre-order') {
+      cb(this.value)
+      if (this.left && this.left.depthFirstForEach(cb, order));
+      if (this.right && this.right.depthFirstForEach(cb, order));
+    }
+    if (order === 'post-order') {
+      if (this.left && this.left.depthFirstForEach(cb, order));
+      if (this.right && this.right.depthFirstForEach(cb, order));
+      cb(this.value)
+    }
   }
-  breadthFirstForEach() {
-
+  breadthFirstForEach(cb, aux = []) {
+    if (this.left) aux.push(this.left)
+    if (this.right) aux.push(this.right)
+    cb(this.value)
+    if (aux.length > 0) aux.shift().breadthFirstForEach(cb, aux)
   }
 }
 
